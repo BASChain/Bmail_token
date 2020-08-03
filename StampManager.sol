@@ -2,7 +2,7 @@ pragma solidity >=0.6;
 
 import "./owned.sol";
 import "./safemath.sol";
-import "./BMailToken.sol";
+import "./BasStamp.sol";
 import "./DomainView.sol";
 
 contract StampManager is owned{

@@ -1,15 +1,14 @@
 pragma solidity >=0.6;
 
-import "./ERC20.sol";
-import "./StampI.sol";
+import "./Stamp.sol";
 
-contract BasStamp is StampI, ERC20{
-    string  public constant  name = "BlockChain Mail Token";
-    string  public constant  symbol = "BMT";
-    uint8   public constant  decimals = 0;
-    uint256 public constant INITIAL_SUPPLY = 4.2e8  * (10 ** uint256(decimals));
+contract BasStamp is Stamp{
+    string  public constant  name = "BlockChain Stamp";
+    string  public constant  symbol = "BMS";
 
-    constructor() public{
+    uint256 public constant INITIAL_SUPPLY = 4.2e8;
+
+    constructor(string memory icon) Stamp(icon) public{
         _mint(msg.sender, INITIAL_SUPPLY);
     }
 }

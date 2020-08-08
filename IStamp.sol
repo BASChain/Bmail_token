@@ -5,8 +5,8 @@ import "./IERC20.sol";
 
 interface IStamp is IERC20{
 
-    function iconUrl() external view returns (string memory url);
-    function issuer() external view returns (address issuer);
+    function iconUrl() external view returns (string memory);
+    function issuer() external view returns (address);
     function claim(address from, uint256 credit, uint256 epoch, bytes calldata signature) external;
     function transferIssuer(address newIssuer) external;
     function active(uint256 amount) external;

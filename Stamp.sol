@@ -245,7 +245,7 @@ contract Stamp is IStamp{
     }
 
     function stampDataOf(address user) override public view returns(uint256 balance, uint256 activedSum, uint256 epoch){
-        return (_balances[msg.sender], _activeBalance[msg.sender].balance, _activeBalance[msg.sender].epoch);
+        return (_balances[user], _activeBalance[user].balance, _activeBalance[user].epoch);
     }
 
     function claim(address from, uint credit, uint epoch, bytes memory signature) override onlyIssuer public{
@@ -288,3 +288,4 @@ contract Stamp is IStamp{
         return (v, r, s);
     }
 }
+

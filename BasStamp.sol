@@ -1,10 +1,12 @@
 pragma solidity >=0.6;
 
 import "./Stamp.sol";
+// SPDX-License-Identifier: MIT
 
 contract BasStamp is Stamp{
     string  public constant  name = "BlockChain Stamp";
     string  public constant  symbol = "BMS";
+    uint8   public constant  decimals = 0;
 
     uint256 public constant INITIAL_SUPPLY = 4.2e8;
 

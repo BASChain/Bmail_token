@@ -5,11 +5,12 @@ import "./IERC20.sol";
 
 interface IStamp is IERC20{
 
-    function iconUrl() external view returns (string memory);
-    function issuer() external view returns (address);
-    function claim(address from, uint credit, bytes calldata signature) external;
+    function iconUrl() external view returns (string memory url);
+    function issuer() external view returns (address issuer);
+    function claim(address from, uint256 credit, uint256 epoch, bytes calldata signature) external;
     function transferIssuer(address newIssuer) external;
-    function active(uint amount) external;
+    function active(uint256 amount) external;
+    function stampDataOf(address user) external view returns(uint256 balance, uint256 activedSum, uint256 epoch);
 
     event Active(
         address indexed from,
@@ -23,6 +24,7 @@ interface IStamp is IERC20{
 
     event Claim(
         address indexed from,
+        uint256 epoch,
         uint256 credit
     );
 }

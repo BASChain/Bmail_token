@@ -17,7 +17,12 @@ contract Stamp is IStamp{
 
     string private _iconUrl;
 
-    mapping (address => uint256) private _activeBalance;
+    struct StampBalance{
+        uint256 balance;
+        uint256 epoch;
+    }
+
+    mapping (address => StampBalance) private _activeBalance;
 
     constructor(string memory icon) public{
         _issuer = msg.sender;
@@ -210,9 +215,6 @@ contract Stamp is IStamp{
         _burn(account, amount);
     }
 
-
-
-
     modifier onlyIssuer(){
         require(msg.sender == _issuer);
         _;
@@ -230,18 +232,59 @@ contract Stamp is IStamp{
         _iconUrl = newUrl;
     }
 
-    function claim(address from, uint credit, bytes memory signature) override public{
-    }
-
-    function transferIssuer(address newIssuer) override public{
+    function transferIssuer(address newIssuer) override onlyIssuer public{
+        _issuer = newIssuer;
     }
 
     function active(uint value) override public{
         require(value <= _balances[msg.sender]);
 
         _balances[msg.sender] = _balances[msg.sender].sub(value);
-        _activeBalance[msg.sender] = _activeBalance[msg.sender].add(value);
+        _activeBalance[msg.sender].balance = _activeBalance[msg.sender].balance.add(value);
         emit Active(msg.sender, value);
     }
-}
 
+    function stampDataOf(address user) override public view returns(uint256 balance, uint256 activedSum, uint256 epoch){
+        return (_balances[msg.sender], _activeBalance[msg.sender].balance, _activeBalance[msg.sender].epoch);
+    }
+
+    function claim(address from, uint credit, uint epoch, bytes memory signature) override onlyIssuer public{
+        require(credit > 0);
+        require(_activeBalance[from].epoch + 1 == epoch);
+        require(_activeBalance[from].balance >= credit);
+
+        bytes32 message = keccak256(abi.encode(this, from, _issuer, credit, epoch));
+        bytes32 msgHash = prefixed(message);
+        require(recoverSigner(msgHash, signature) == from);
+
+        _activeBalance[from].balance = _activeBalance[from].balance.sub(credit);
+        _balances[_issuer] = _balances[_issuer].add(credit);
+        _activeBalance[from].epoch += 1;
+
+        emit Claim(from, credit, epoch);
+    }
+
+    /// builds a prefixed hash to mimic the behavior of eth_sign.
+    function prefixed(bytes32 hash) internal pure returns (bytes32) {
+        return keccak256(abi.encode("\x19Ethereum Signed Message:\n32", hash));
+    }
+
+    function recoverSigner(bytes32 message, bytes memory sig) internal pure  returns (address) {
+        (uint8 v, bytes32 r, bytes32 s) = splitSignature(sig);
+        return ecrecover(message, v, r, s);
+    }
+
+    /// signature methods.
+    function splitSignature(bytes memory sig) internal pure returns (uint8 v, bytes32 r, bytes32 s) {
+        require(sig.length == 65);
+        assembly {
+        // first 32 bytes, after the length prefix.
+            r := mload(add(sig, 32))
+        // second 32 bytes.
+            s := mload(add(sig, 64))
+        // final byte (first byte of the next 32 bytes).
+            v := byte(0, mload(add(sig, 96)))
+        }
+        return (v, r, s);
+    }
+}

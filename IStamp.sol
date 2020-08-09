@@ -10,7 +10,7 @@ interface IStamp is IERC20{
     function claim(address from, uint256 credit, uint256 epoch, bytes calldata signature) external;
     function transferIssuer(address newIssuer) external;
     function active(uint256 amount) external;
-    function stampDataOf(address user) external view returns(uint256 balance, uint256 activedSum, uint256 epoch);
+    function activeBalanceOf(address user) external view returns(uint256 balance, uint256 activedSum, uint256 epoch);
 
     event Active(
         address indexed from,

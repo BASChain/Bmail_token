@@ -13,5 +13,9 @@ contract BasStamp is Stamp{
     constructor(string memory icon) Stamp(icon) public{
         _mint(msg.sender, INITIAL_SUPPLY);
     }
+
+    function basicSetting() public view returns(address i, string memory n, string memory s, string memory icon){
+        return (issuer(), name, symbol, iconUrl());
+    }
 }
 

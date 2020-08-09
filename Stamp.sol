@@ -244,7 +244,7 @@ contract Stamp is IStamp{
         emit Active(msg.sender, value);
     }
 
-    function stampDataOf(address user) override public view returns(uint256 balance, uint256 activedSum, uint256 epoch){
+    function activeBalanceOf(address user) override public view returns(uint256 balance, uint256 activedSum, uint256 epoch){
         return (_balances[user], _activeBalance[user].balance, _activeBalance[user].epoch);
     }
 

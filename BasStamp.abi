@@ -153,6 +153,35 @@
 		"inputs": [
 			{
 				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "activeBalanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "balance",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "activedSum",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "epoch",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
 				"name": "owner",
 				"type": "address"
 			},
@@ -211,6 +240,34 @@
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "basicSetting",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "i",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "n",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "s",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "icon",
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -352,35 +409,6 @@
 				"internalType": "string",
 				"name": "",
 				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			}
-		],
-		"name": "stampDataOf",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "balance",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "activedSum",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "epoch",
-				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",

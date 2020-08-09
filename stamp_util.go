@@ -1,4 +1,4 @@
-package stamp
+package stamp_token
 
 import (
 	"github.com/ethereum/go-ethereum/common"

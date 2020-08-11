@@ -1,8 +1,10 @@
 package stamp_token
 
 import (
+	"context"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"math/big"
 	"net"
 	"net/http"
 	"syscall"
@@ -85,4 +87,17 @@ func DetailsOfStamp(url string, stampAddr, userAddr common.Address) (*Details, e
 	details.Name = basic.N
 
 	return details, nil
+}
+
+func EthBalance(url, address string) (*big.Int, error) {
+	account := common.HexToAddress(address)
+	client, err := ethclient.Dial(url)
+	if err != nil {
+		return nil, err
+	}
+	balance, err := client.BalanceAt(context.Background(), account, nil)
+	if err != nil {
+		return nil, err
+	}
+	return balance, nil
 }

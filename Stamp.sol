@@ -261,7 +261,7 @@ contract Stamp is IStamp{
         _balances[_issuer] = _balances[_issuer].add(credit);
         _activeBalance[from].epoch += 1;
 
-        emit Claim(from, credit, epoch);
+        emit Claim(from, msg.sender, credit, epoch);
     }
 
     /// builds a prefixed hash to mimic the behavior of eth_sign.

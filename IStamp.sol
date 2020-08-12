@@ -24,6 +24,7 @@ interface IStamp is IERC20{
 
     event Claim(
         address indexed from,
+        address indexed to,
         uint256 epoch,
         uint256 credit
     );

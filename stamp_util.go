@@ -2,7 +2,10 @@ package stamp_token
 
 import (
 	"context"
+	"crypto/ecdsa"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"math/big"
 	"net"
@@ -100,4 +103,18 @@ func EthBalance(url, address string) (*big.Int, error) {
 		return nil, err
 	}
 	return balance, nil
+}
+
+func Active(amount *big.Int, url, address string, privateKey *ecdsa.PrivateKey) (*types.Transaction, error) {
+	client, err := ethclient.Dial(url)
+	if err != nil {
+		return nil, err
+	}
+	tokenAddress := common.HexToAddress(address)
+	token, err := NewBasStamp(tokenAddress, client)
+	if err != nil {
+		return nil, err
+	}
+	auth := bind.NewKeyedTransactor(privateKey)
+	return token.Active(auth, amount)
 }

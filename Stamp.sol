@@ -1,4 +1,4 @@
-pragma solidity >=0.6;
+pragma solidity ^0.6;
 
 import "./IStamp.sol";
 import "./safemath.sol";
@@ -220,23 +220,23 @@ contract Stamp is IStamp{
         _;
     }
 
-    function issuer() override  public view returns (address){
+    function issuer() override  external view returns (address){
         return _issuer;
     }
 
-    function iconUrl() override view public returns (string memory){
+    function iconUrl() override view external returns (string memory){
         return _iconUrl;
     }
 
-    function changeIconUrl(string memory newUrl) onlyIssuer public{
+    function changeIconUrl(string memory newUrl) onlyIssuer external{
         _iconUrl = newUrl;
     }
 
-    function transferIssuer(address newIssuer) override onlyIssuer public{
+    function transferIssuer(address newIssuer) override onlyIssuer external{
         _issuer = newIssuer;
     }
 
-    function active(uint value) override public{
+    function active(uint256 value) override external{
         require(value <= _balances[msg.sender]);
 
         _balances[msg.sender] = _balances[msg.sender].sub(value);
@@ -244,11 +244,20 @@ contract Stamp is IStamp{
         emit Active(msg.sender, value);
     }
 
+    function deactive(address to, uint256 value) override onlyIssuer external{
+        require(value <= _activeBalance[to].balance);
+        
+        _activeBalance[to].balance = _activeBalance[to].balance.sub(value);
+        _activeBalance[to].epoch += 1;
+        _balances[to] = _balances[to].add(value);
+        emit Deactive(to, value);
+    }
+    
     function activeBalanceOf(address user) override public view returns(uint256 balance, uint256 activedSum, uint256 epoch){
         return (_balances[user], _activeBalance[user].balance, _activeBalance[user].epoch);
     }
 
-    function claim(address from, uint credit, uint epoch, bytes memory signature) override onlyIssuer public{
+    function claim(address from, uint credit, uint epoch, bytes memory signature) override onlyIssuer external{
         require(credit > 0);
         require(_activeBalance[from].epoch + 1 == epoch);
         require(_activeBalance[from].balance >= credit);
@@ -288,4 +297,3 @@ contract Stamp is IStamp{
         return (v, r, s);
     }
 }
-
